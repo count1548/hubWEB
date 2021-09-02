@@ -1,31 +1,31 @@
-import React, {useState, useEffect}  from "react"
-import Button from '@material-ui/core/Button'
-import Dialog from '../Dialog'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import React from "react"
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root : {
         lineHeight:'3em',
     },
     header : {
         display : 'inline-block',
-        borderLeft : '10px solid #555',
+        borderLeft : '10px solid #bbb',
         paddingLeft : '8px',
-
+        verticalAlign:'top',
         width : '40%',
     },
     content : {
+        width : 'calc(60% - 18px)',
+        display : 'inline-block',
         color : 'grey'
     },
   }),
 )
 
-export default function Container ({
+export default function TextLabel ({    //텍스트 좌측 라벨 표시
     label, children
 }) {
     const classes = useStyles()
-    if(children === null) children = '정보없음'
+    if(children === null || children === '') children = '정보없음'
     return (
         <div className={classes.root}>
             <span className={classes.header}>{label}</span>

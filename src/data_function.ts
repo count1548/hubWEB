@@ -1,10 +1,10 @@
-const host = "http://uck.myds.me"
-
+const host = "https://hub.hsu.ac.kr"
+//https://hub.hsu.ac.kr
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-const getAPI = (target, name, port=3001) => {
+const getAPI = (target, URL = host, port='7000') => {
     return new Promise<any[]>((resolve, reject) => {
-        fetch(`${host}:${port}/${target}`, {
+        fetch(`${URL}/${target}`, {
             method: 'GET',
             headers:{
                 'Accept': 'application/json',
@@ -12,69 +12,33 @@ const getAPI = (target, name, port=3001) => {
             }
         })
         .then(res => res.json())
-        .then(res => resolve(res[name]))
+        .then(res => {
+            if(typeof res.message !== 'undefined') resolve([]) 
+            else resolve(res)
+        })
         .catch(err => reject(err))
-    })
-    
+    })   
 }
-const setAPI = (target, data, port=3333) => {
-    console.log({
-        url : target,
-        body : data,
-    })
+const setAPI = (target, data, file = false) => {
+    const formData = file ? {
+        method: 'POST',
+        body : data
+    } : {
+        method: 'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        body : JSON.stringify(data)
+    }
     return new Promise<any>((resolve, reject) => {
-        fetch(`${host}:${port}/${target}`, {
-            method: 'POST',
-                headers:{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            body : JSON.stringify(data)
+        fetch(`${host}/${target}`, {
+            ...formData
         })
-	.then(res => {
-		console.log(res)
-		resolve('success')
-	})
-        .catch(err => reject(err))
+        .then(res => res.json()).then(res => resolve(res))
+        .catch(err => reject(err) )
     })
 }
-
-const setTimeTable = (data, target) => {
-    return new Promise((resolve, rej) => {
-        fetch(`${host}/${target}/import/`, {
-            method: 'POST',
-            headers : {'Content-Type': 'multipart/form-data'},
-            body : data
-        })
-        .then(res => resolve(res))
-        .catch(err => {
-            console.log(err)
-            rej(err)
-        })
-    })
-}
-
-// const arrayToDict = (arr:Object[], idxList:string[], valueList:string[], retArr = false) => {
-//     var column
-//     const len = idxList.length
-
-//     const getTaget = idx => {
-
-//     }
-
-//     if(idxList.length <= 1)  
-//     const data = dictToArr(arr, idxList.shift(), null, true)
-
-//     for(var key in data) {
-//         data[key] = dictToArr(data[key], idxList[0], null, true)
-//     }
-
-//     arr.forEach ( (object, idx) => {
-//         idxList.forEach ( key => {
-//             if()
-//         })
-//     })
-// }
 
 const dictToArr = (dict:any[], idxName:string, value:string|null = null, array=false) => {
     let column = {}
@@ -111,4 +75,4 @@ const isAvailable = object =>
   Object.keys(object).length === 0)
 
 
-export { getAPI, setAPI, dictToArr, dictToArr_s, setTimeTable, isAvailable }
+export { getAPI, setAPI, dictToArr, dictToArr_s, isAvailable }

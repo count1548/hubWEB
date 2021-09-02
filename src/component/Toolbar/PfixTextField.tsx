@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField';
+import React, { useEffect, useState } from 'react';
+import NumberFormat from 'react-number-format';
 
 let prefix = '￦'
 
@@ -10,7 +10,7 @@ interface NumberFormatCustomProps {
     name: string;
 }
 
-function NumberFormatCustom(props: NumberFormatCustomProps) {
+function NumberFormatCustom(props: NumberFormatCustomProps) {   //텍스트박스 prefix Component
     const { inputRef, onChange, ...other } = props;
 
     return (

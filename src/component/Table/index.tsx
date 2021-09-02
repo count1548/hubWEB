@@ -1,33 +1,32 @@
-import React, {useState, useEffect } from 'react'
-import {makeStyles, Theme, createStyles} from '@material-ui/core/styles'
-
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
-
+import React, { useEffect, useState } from 'react'
 import NoData from './NoData'
-import Button from '@material-ui/core/Button'
+
+
 
 const createStyle = (headWidth, columnLen, style, maxHeight = null) => {
-    return makeStyles((theme : Theme) => createStyles({
+    return makeStyles(() => createStyles({
             tablePaper: {
                 width:'100%',
                 margin : '0 auto',
                 borderRadius: '15px',
                 fontFamily:'NanumSquareRoundR',
-                testAlign:'center',
+                textAlign:'center',
                 maxHeight:maxHeight,
                 "&::-webkit-scrollbar" : { 	
                     width: '10px',
                     backgroundColor: '#F5F5F5'
                 },
-                "&::-webkit-scrollbar-thumb" : { 	
-                    borderRadius: '10px',
+                "&::-webkit-scrollbar-thumb" : {
                     backgroundColor: '#8097AF'
                 }
             },
@@ -74,25 +73,27 @@ const equals = (obj, target) => {
 
 const CustomTable = (props) => {
     const { column, rowHead, record, isrowHead=true, headWidth = 10,
-            onClick = (idx) => {}, onSelected = (idx) => {}, 
+            onClick = (idx) => { }, onSelected = (idx) => { }, 
             onChange = ()=>{}, onSubmit = () => {},
             style=null, editable=false, selectable = false, button=null, 
-            selecteCount = record.length, maxHeight = null } = props
-    
-    const [selectList, setSelecte] = useState<number[]>([]) //case - selectable true
-    useEffect(()=>setSelecte([]), [])
-    
+            selecteCount = record.length, maxHeight = null, defaultSelected = -1,
+            doubleClick = true } = props
+
+    const [selectList, setSelectList] = useState<number[]>([]) //case - selectable true
+    useEffect(()=>{
+        setSelectList(defaultSelected === -1 ? [] : [defaultSelected, ])
+    }, [defaultSelected])
+
     if(column.length === 0 || record.length === 0) return <NoData message='Please Select Options' />
-    
     const changeList:Object[] = []                  //case - editable true 
     const rowData = (!isrowHead) ? record :
-        rowHead.map((data, idx) => [data].concat(record[idx]))
+        rowHead.map((data, idx) => [data].concat(record[idx]))  //rowHead 가 존재하지 않는 단일컬럼 처리
     const columnData:string[] = column
     const length = columnData.length
 
     const classes = createStyle(headWidth, length, style, maxHeight)()
 
-    const Cell = (row, column, value) => {
+    const Cell = (row, column, value) => {  //editable일 경우 cell을 텍스트박스로 변경
         if(editable && column !== 0) 
             return <TextField
                 id={`${row}-${column}`}
@@ -117,7 +118,7 @@ const CustomTable = (props) => {
         return value
     }
 
-    const getButton = () => {
+    const getButton = () => {   //버튼 return
         let color, msg, onClick
         switch(button) {
             case 'apply':
@@ -142,22 +143,23 @@ const CustomTable = (props) => {
         )
     }
 
-    const clickHandle = (_idx:number) => {
+    const clickHandle = (_idx:number) => {  //row Click 처리
         if(selectable) {
             const temp = selectList.slice()
             const alreadyIdx = temp.indexOf(_idx)
 
-            if(alreadyIdx !== -1) temp.splice(alreadyIdx, 1)
+            if(alreadyIdx !== -1) {if(doubleClick) temp.splice(alreadyIdx, 1)}
+                
             else {
                 if(selectList.length >= selecteCount) temp.shift()
                 temp.push(_idx)
             }
-            setSelecte(temp)
+            setSelectList(temp)
             onSelected(_idx)
         }
         onClick(_idx)
     }
-    const getStyle = (column, row) => {
+    const getStyle = (column, row) => { //스타일 설정
         let _class:string
         if(column === -1) {  //column head
             _class = classes.headCell + ' ' + 

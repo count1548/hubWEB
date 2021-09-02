@@ -6,15 +6,21 @@
 }
 .node {
     width:10px;height:10px;
+    border:1px solid grey;
     margin:2px;
     float:left;
     font-size:10px;
     border-radius:2px;
     background:powderblue;
 }
+.row { display:block; width:73px; margin:0 auto;}
+.row:after {
+    content:" ";
+    display:block;
+    clear:both;
+
+}
 .node:nth-child(2) {
     margin-right:8px;
 }
-.selected {
-    background:#ee423e;
-}
+.selected { background:#ee423e; }

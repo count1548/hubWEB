@@ -4,34 +4,26 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface dialogInterface {
-  children? : any;
-  submitMsg? : string; resetMsg? : string;
-  type? : string;
+  children? : string;
+  submitMsg? : string;
   title? : string;
-  submit? : boolean, reset? : boolean,
-  onClose : () => void; onSubmit? : () => void; onExit? : () => void; 
-  defaultState? : boolean;
+  submit? : boolean,
+  onClose : () => void; onSubmit? : () => void;
+  open? : boolean;
 }
 
-export default function AlertDialog({ //Material Ui Dialog를 사용한 사용자 Modal 표시
-  onSubmit=()=>{}, onExit=()=>{},
-    children, submit = true, reset = true,
-    submitMsg = '확인', resetMsg = '나가기', 
-    type = 'text',
-    title = 'Dialog',
+export default function AlertDialog({ //Modal에 전달되는 props 최소화
+  onSubmit=()=>{},
+    children, submit = true,
+    submitMsg = '확인',
+    title = 'Warning',
     onClose = ()=>{},
-    defaultState = false,
-}:dialogInterface) { 
-  const [open, setOpen] = useState(defaultState);
-  useEffect(() =>  setOpen(defaultState), [defaultState])
-
-  const handleClose = () => {
-    setOpen(false)
-    onClose()
-  }
+    open = false,
+}:dialogInterface) {
+  const handleClose = () => onClose()
 
   return (
       <Dialog
@@ -42,23 +34,17 @@ export default function AlertDialog({ //Material Ui Dialog를 사용한 사용�
         maxWidth={'xl'}
       >
         <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-        {(type === 'component') ? <div style={{padding : '20px'}}>{children}</div> : <DialogContent>
+        <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {children}
           </DialogContentText>
-        </DialogContent>}
+        </DialogContent>
         <DialogActions>
           {submit ? <Button onClick={()=>{
             onSubmit()
             handleClose()
           }} color="primary" autoFocus>
             {submitMsg}
-          </Button> : null}
-          {reset ? <Button onClick={()=>{
-            onExit()
-            handleClose()
-          }} color="primary">
-            {resetMsg}
           </Button> : null}
         </DialogActions>
       </Dialog>

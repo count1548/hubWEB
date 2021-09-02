@@ -1,52 +1,21 @@
 /*eslint-disable */
-import React, {useState, useEffect}  from "react"
-import TransferList from '../component/LineList/'
-import {isAvailable, getAPI, dictToArr, dictToArr_s, setAPI} from '../data_function' 
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-
-import '../style/lineTable.css'
-import Toolbar from '../component/Toolbar'
+import Loading from '@material-ui/core/CircularProgress'
+import React, { useEffect, useState } from "react"
 import Table from '../component/Table/'
 import NoData from '../component/Table/NoData'
-import Loading from '@material-ui/core/CircularProgress'
-import Button from '@material-ui/core/Button';
-import Dialog from '../component/Dialog'
-
+import Toolbar from '../component/Toolbar'
+import { isAvailable } from '../data_function'
 import '../style/font.css'
-import { LinearProgress } from "@material-ui/core"
-
-const lineToRows = (dict:any, lineIDX) => {
-  const IDX =  dictToArr(lineIDX, 'IDX', 'SHUTTLE_STOP_NAME')
-  for(var line in dict) for(var day in dict[line]) for(var bus in dict[line][day])  {
-    const now = dict[line][day][bus]
-    dict[line][day]['LINE'] = now.map(value => ({
-      'IDX' : value['IDX_BUS_LINE'], 
-      'NAME' : IDX[value['IDX_BUS_LINE']]
-    }))
-    dict[line][day][bus] = now.map((value, idx) => ({
-      'IDX_BUS_LINE' : value['IDX_BUS_LINE'],
-      'TIME' : value['BUS_TIME'],
-    }))
-  }
-  return dict
-}
-
-const setTime_orderby_ID = (dict:any[]) =>  {
-  const data =  dictToArr_s(dict, 'LINE_NAME', 'CODE', null, true)
-  for(var line_name in data) for(var code_name in data[line_name]) {
-    data[line_name][code_name] =  dictToArr(data[line_name][code_name], 'BUS_ID', null, true)
-  }
-  return data
-}
+import '../style/lineTable.css'
 
 async function getData() {
-  const time = await  getAPI('bus/shuttle/time/', 'result')  // important api sql 구문에서 첫 노선 시간에 따른 정렬 순서대로 불러올것!
-  const line = await  getAPI('bus/shuttle/line/', 'result')
+  // const time = await  v1_getAPI('bus/shuttle/time/', 'result')  // important api sql 구문에서 첫 노선 시간에 따른 정렬 순서대로 불러올것!
+  // const line = await  v1_getAPI('bus/shuttle/line/', 'result')
   
-  const timeData = setTime_orderby_ID(time)
-  const lineData = lineToRows(timeData, line)
+  // const timeData = setTime_orderby_ID(time)
+  // const lineData = lineToRows(timeData, line)
   
-  return { timeData, lineData}
+  return { timeData : [], lineData : []}
 }
 
 let lineData:Object = {}, 
@@ -55,14 +24,13 @@ let lineData:Object = {},
 
 const ShuttleLine = props => {
   const [state, setState] = useState('apply')
-
-  const [required, setRequired] = useState(false)
   const [lineName, setLineName] = useState('') 
   const [day, setDay] = useState('')
   const init = () => {
     setLineName('')
     setDay('')
   }
+  console.log(timeData)
   //data setting
   useEffect(()=> {
     getData().then(res => {
@@ -110,12 +78,6 @@ const ShuttleLine = props => {
         disable : () => ((lineName == '') || (state !== 'show'))
     },]
   ]
-
-  const equals = (obj1, obj2) => {
-    if((obj1['IDX_BUS_LINE'] === obj2['IDX_BUS_LINE']) &&
-    (obj1['BUS_ID'] == obj2['BUS_ID'])) return true
-    return false
-  }
   
   const displayComponent = () => {
     if(!selected) return <NoData message='Please Select Options'/>

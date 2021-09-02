@@ -1,25 +1,25 @@
 /*eslint-disable */
-import React, {useState, useEffect, }  from "react"
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import SelectForm from '../Table/SelectForm'
-import TextField from '@material-ui/core/TextField'
-import PrefixTextField from './PfixTextField'
-
-import '../../style/font.css'
-
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import React, { useEffect, useState } from "react";
+import '../../style/font.css';
+import SelectForm from '../Table/SelectForm';
+import PrefixTextField from './PfixTextField';
+ 
 const useStyles = makeStyles((theme) => ({
     toolbar : {
         width:'calc(100% - 10px)',
-        height: '70px', padding:'5px',
+        minHeight: '70px', padding:'5px',
         background: '#eee',
         borderRadius:'20px',
         margin:'0 auto',
         marginBottom:'30px',
+        '&:after' : {
+            content:'\' \'',
+            display:'block',
+            clear:'both',
+        },
     },
     head: {
         position:'relative',
@@ -47,19 +47,41 @@ const useStyles = makeStyles((theme) => ({
         fontWeight:'normal',
         marginLeft:'10px',
         cursor:'pointer'
-    },
+    }, labelStyle : {
+        color : '#2d587c',
+        position : 'relative',
+        fontSize : '20px',
+        fontFamily : 'NanumSquareRoundEB',
+        fontWeight : 'bold',
+        paddingLeft:'20px'
+    }
 }));
 
 const Header = ({component, style, button}) =>
     <div className={style} data-text={component}>{button}</div>
 
-const SelectBox = ({children, style}) => <div className={style}> {children} </div>
-const TextForm = ({label, onChange, name, value='', textType = 'text'}) => {
+const SelectBox = ({children, style=''}) => <div className={style}> {children} </div>
+const DateBox = ({label, value, onChange, width, fullWidth = false}) => {
+    return (
+        <TextField
+            id="date"
+            label={label}
+            type="date"
+            value = {value}
+            variant="outlined" 
+            onChange = {onChange}
+            style = {{width:fullWidth ? 500 : 190, marginTop:8, marginLeft:10, backgroundColor:'#fff'}}
+            InputLabelProps={{
+            shrink: true,
+            }}/>
+    )
+        
+}
+const TextForm = ({label, onChange, name, value='', textType = 'text', fullWidth, type}) => {
     const [text, setText] = useState<any>(value)
     useEffect(() => {
         setText(value)
     }, [value])
-
     const textField = (textType === 'money') ? 
         <PrefixTextField
             id={label}
@@ -78,7 +100,7 @@ const TextForm = ({label, onChange, name, value='', textType = 'text'}) => {
                 setText(val)
                 onChange(val)
             }}
-            style = {{width:190, marginTop:8, marginLeft:10, backgroundColor:'#fff'}}/>
+            style = {{width:fullWidth ? 500 : 190, marginTop:8, marginLeft:10, backgroundColor:'#fff'}}/>
     return (
         <div style={{float : 'left'}}>
                 {(typeof(name) === 'undefined') ? textField : 
@@ -89,9 +111,18 @@ const TextForm = ({label, onChange, name, value='', textType = 'text'}) => {
         </div>
     )
 }
+const LabelForm = ({value}) => {
+    const classes = useStyles()
+
+    return (<div style = {{
+        float:'left', paddingTop:'20px'
+    }} className={classes.labelStyle}>
+            {value}
+    </div>)
+}
 
 const Toolbar = (props) => {
-    const {header = true, title, inputForm, buttons} = props
+    const {header = true, title, inputForm = [], buttons=[]} = props
     const classes = useStyles()
     return (
         <div style={{
@@ -103,14 +134,23 @@ const Toolbar = (props) => {
                     buttons.map((data, idx) => 
                         <div className={classes.button} key={idx} onClick={data['action']}>{data['label']}</div>
             )}/> : null}
-            <div style={{marginBottom:'30px'}}>
+            <div>
             {
+                inputForm.length === 0 ? null :
                 inputForm.map((box, key) => 
                     <SelectBox style={classes.toolbar} key={key}>
-                        {box.map((form, idx) =>  
-                            ((form['type'] === 'select') ? 
-                                <SelectForm {...form} key={idx}/> : 
-                                <TextForm {...form} key = {idx}/>))} 
+                        {box.map((form, idx) => {
+                            switch(form['type']) {
+                                case 'select':
+                                    return <SelectForm {...form} key={idx}/>
+                                case 'text': case 'multi-text':
+                                    return <TextForm {...form} key = {idx}/>
+                                case 'date':
+                                    return <DateBox {...form} key = {idx}/>
+                                case 'label':
+                                    return <LabelForm {...form} key = {idx}/>
+                            }
+                        })}
                     </SelectBox>)
             }
             </div>

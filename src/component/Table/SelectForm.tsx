@@ -1,12 +1,12 @@
 /*eslint-disable */
-import React, {useState, }  from "react"
-import { makeStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import '../../style/font.css'
+import { makeStyles } from '@material-ui/core/styles';
+import React from "react";
+import '../../style/font.css';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -26,11 +26,13 @@ interface form_interface {
 const SelectForm = ({name, label, options, onChange, value, disable = null, width = 33} : form_interface) => {
     const changeValue = event => onChange(event.target.value)
     const classes = useStyles()
+    const _value = (value === null) ? 0 : value
+    
     const content = <FormControl variant="outlined" className={classes.formControl} {
             ...{disabled : (disable == null) ? false : disable()}}>
             <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
             <Select
-                value={value}
+                value={_value}
                 onChange={changeValue}
                 label={label}
                 inputProps={{

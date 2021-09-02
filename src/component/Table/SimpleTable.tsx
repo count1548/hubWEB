@@ -1,31 +1,8 @@
+import MaterialTable from 'material-table';
 import React from 'react';
-import MaterialTable, { Column } from 'material-table';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
-interface Row {
-  name: string;
-  surname: string;
-  birthYear: number;
-  birthCity: number;
-}
-
-interface TableState {
-  columns: Array<Column<Row>>;
-  data: Row[];
-}
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root : {
-          borderRadius: "10px",
-          boxShadow: "0"
-        },
-    }),
-)
-
-export default function MaterialTableDemo({columns, data}) {
-  const classes = useStyles()
-
+export default function MaterialTableDemo({columns, data, onSelectionChange = (row) => {}}) {
+  //Material-table 사용
   return (
     <div >
       <MaterialTable
@@ -41,8 +18,12 @@ export default function MaterialTableDemo({columns, data}) {
           headerStyle : {
             background:'#eee',
             borderBottom:'2px solid black'
-          }
-        }}/>
+          },
+          pageSizeOptions : [4,],
+          pageSize:4,
+        }}
+        onSelectionChange={onSelectionChange}
+        />
     </div>
   );
 }

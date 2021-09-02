@@ -1,6 +1,6 @@
-import React from 'react';
-import { withStyles, Theme } from '@material-ui/core/styles';
+import { Theme, withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import React from 'react';
 
 const HtmlTooltip = withStyles((theme: Theme) => ({
   tooltip: {
@@ -12,13 +12,13 @@ const HtmlTooltip = withStyles((theme: Theme) => ({
   },
 }))(Tooltip);
 
-export default function CustomizedTooltips(props) {
+export default function CustomizedTooltips(props) { //Material-ui Tooltip 사용
     const {children, text} = props
     return (
         <HtmlTooltip
             title={<React.Fragment>{text}</React.Fragment>}
             placement="left">
-            {children}
+            <span>{children}</span>
         </HtmlTooltip>
     );
 }

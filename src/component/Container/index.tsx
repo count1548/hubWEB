@@ -1,12 +1,11 @@
-import React, {useState, useEffect}  from "react"
-import Button from '@material-ui/core/Button'
-import Dialog from '../Dialog'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import React from "react"
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     mainWarp : {
         borderRadius : '6px',
+        border:'1px solid grey',
         background : '#eee',
     },
     warp : {
@@ -37,11 +36,11 @@ interface containerInterface {
     title : string,
     background? : null | string,
     width : string,
-    align : null | 'left' | 'right',
+    align? : null | 'left' | 'right',
     children : any
 }
 
-export default function Container ({
+export default function Container ({    //타 Component 를 감싸는 Warpper Component
     title = '',
     background = null,
     width='100%',
@@ -49,7 +48,7 @@ export default function Container ({
     children
 } : containerInterface) {
     const classes = useStyles()
-    const style = {
+    const style = { //style 설정
         width : width,
         ...(align === null) ? null : {float : align},
         ...(background === null) ? null : {background : background}

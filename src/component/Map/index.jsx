@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { GoogleMap, LoadScript, Autocomplete, Marker  } from '@react-google-maps/api';
+import { Autocomplete, GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import React, { Component } from 'react';
 
 const mapContainerStyle = {
     height: "400px",
@@ -13,7 +13,7 @@ const equals = (prev, next) =>
     (prev['lng'] === next['lng']))
 const lib = ["places"]
 
-class MyMapWithAutocomplete extends Component {
+class MyMapWithAutocomplete extends Component { //구글맵 컴포넌트
     constructor(props) {
         super(props)
 
@@ -21,7 +21,6 @@ class MyMapWithAutocomplete extends Component {
 
         this.onLoad = this.onLoad.bind(this)
         this.onPlaceChanged = this.onPlaceChanged.bind(this)
-
         this.state = {
             center : {...props.defaultCenter},
             markerPosition : {...props.defaultCenter}
@@ -47,14 +46,13 @@ class MyMapWithAutocomplete extends Component {
                 lat : location.lat(),
                 lng : location.lng()
             }
-            this.props.onChange(loc)
+            //this.props.onClick(loc)
             this.setState({center : {...loc}})
         } else {
             console.log('Autocomplete is not loaded yet!')
         }
     }
-
-    render() {    
+    render() {
         return (
             <LoadScript
                 googleMapsApiKey="AIzaSyACwixJrrTRyzuCE41kMC_-ZrGCMrRQFfY"
@@ -69,14 +67,33 @@ class MyMapWithAutocomplete extends Component {
                             lat : ev.latLng.lat(),
                             lng : ev.latLng.lng()
                         }
-                        this.props.onChange(location)
-                        this.setState({...this.state, markerPosition : {...location}})
+                        if(this.props.markerChange) {
+                            this.props.onClick(location)
+                            this.setState({...this.state, markerPosition : {...location}})
+                        }
                     }}>
-                    <Marker position={this.state.markerPosition}/>
+                    /**marker display**/
+                    {(this.props.markers !== null) ? 
+                    this.props.markers.map((pos, idx) => <Marker key={idx}
+                        position={{
+                            lat : pos['BUS_LATITUDE'],
+                            lng : pos['BUS_LONGITUDE']
+                        }}
+                        {...(typeof this.props.markerIcon !== 'undefined') ? {
+                            icon : (
+                                this.props.defaultCenter.lat === pos['BUS_LATITUDE'] && 
+                                this.props.defaultCenter.lng === pos['BUS_LONGITUDE']) ? this.props.selectedIcon : this.props.markerIcon
+                        } : null}
+                    />) : <Marker
+                        position={this.state.markerPosition}
+                        {...(typeof this.props.markerIcon !== 'undefined') ? {
+                            icon : this.props.markerIcon
+                        } : null}
+                    />}
+                    /**-------AutoComplete 자동완성 컴포넌트------**/
                     <Autocomplete
                         onLoad={this.onLoad}
-                        onPlaceChanged={this.onPlaceChanged}
-                    >
+                        onPlaceChanged={this.onPlaceChanged}>
                         <input
                             type="text"
                             placeholder="Search Place"
@@ -101,6 +118,12 @@ class MyMapWithAutocomplete extends Component {
             </LoadScript>
         )
     }
+}
+
+MyMapWithAutocomplete.defaultProps = {
+    onClick : () => {},
+    markers : null, 
+    markerChange : true
 }
 
 export default MyMapWithAutocomplete

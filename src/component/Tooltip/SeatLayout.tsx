@@ -1,5 +1,6 @@
+/*eslint-disable*/
 import React from 'react';
-import './busSeat.css'
+import './busSeat.css';
 
 let seatLayout = [
     [1, 2, 3, 4],
@@ -23,8 +24,10 @@ const SeatLayout = ({num}) => {
                 <div className = 'row' key = {idx}>
                 {row.map((number, idx) => {
                     // eslint-disable-next-line
-                    var _class = number == num ? 'node selected' : 'node' 
-                    return <div className={_class} key = {idx}></div>
+                    var _classType = (typeof num !== 'object') ? 
+                        num == number :
+                        num.indexOf(number) !== -1 
+                    return <div className={_classType ? 'node selected' : 'node'} key = {idx}></div>
                 })}
                 </div>
             )}

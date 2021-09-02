@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from "react"
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
-import InputBase from '@material-ui/core/InputBase'
 import IconButton from '@material-ui/core/IconButton'
+import InputBase from '@material-ui/core/InputBase'
+import Paper from '@material-ui/core/Paper'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu'
 import SearchIcon from '@material-ui/icons/Search'
+import React, { useEffect, useState } from "react"
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export default function CustomizedInputBase(props) {
+export default function CustomizedInputBase(props) {    //UserManage에서 사용되는 검색컴포넌트
     const classes = useStyles()
     const [text, setText] = useState<string>('')
     const { onSearch=()=>{} } = props
