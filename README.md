@@ -1,68 +1,31 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# HUB Admin Page
+### belong [UCK]
+![image](https://user-images.githubusercontent.com/22098393/134148766-2e947356-8d2a-450c-8185-c0a964fe6e17.png)
 
-## Available Scripts
+호서대학교에는 학생들에게 제공되는 버스와 관련하여 예약 및 각종 편의 기능을 제공하는 애플리케이션인 HUB와 연동하여<br/>
+각종 관리기능을 제공되는 웹 페이지 개발
 
-In the project directory, you can run:
+## 기능
+- 관리자 로그인
+- Application Push 기능
+- 공지 관리 [CRUD]
+- 통학버스
+	- 노선관리 [CRUD]
+	- 위치조회
+	- 일정관리[CRUD]
+	- 티켓관리 [RD] & Download [Excel]
+- 셔틀버스
+	- 노선관리 [CRUD]
+	- 위치조회
+	- 일정관리 [CRUD]
+	- Payback (셔틀요금환급) 조회
+	- 승하차조회
+- 정류장 관리 (셔틀/통학)
+- 버스위치로그 조회
+- 단말기(NFC) 관리 [CRUD]
+- 사용자(학생) 관리 [RU]
+---
 
-### `npm start`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+| WEB FE | APP | BE | DESIGNER | PM | 
+|---|---|---|---|---|
+|1명|2명|2명|1명|1명|
